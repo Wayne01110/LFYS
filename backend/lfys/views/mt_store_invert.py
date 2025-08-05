@@ -9,6 +9,9 @@ from dvadmin.utils.json_response import DetailResponse
 
 class MTStoreInvertView(APIView):
     permission_classes = []
+    """
+        add by Wayne 2025-08-02  美团门店转化报表
+    """
 
     def post(self, request):
         files = request.FILES.getlist('files')

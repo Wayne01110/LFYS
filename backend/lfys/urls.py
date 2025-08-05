@@ -5,6 +5,7 @@ from .views.lf_project_deal_rank import LFProjectDealRankView
 from .views.lf_project_package_doctor import LFProjectPackageDoctorView
 from .views.lf_sk import LFSKViewSet
 from .views.lf_xcx_client_info import LFXcxClientInfoView
+from .views.mt_commission import MTCommissionView
 from .views.mt_inflow_outflow import MTInflowOutflowView
 from .views.mt_store_invert import MTStoreInvertView
 
@@ -19,6 +20,7 @@ urlpatterns = [
     #美团
     path('api/MTInflowOutflowView/', MTInflowOutflowView.as_view(), name='mt_inflow_outflow'),              # 美团流入流出
     path('api/MTStoreInvertView/', MTStoreInvertView.as_view(), name='mt_store_invert'),                    # 美团门店转化报表
+    path('api/MTCommissionView/', MTCommissionView.as_view(), name='mt_commission'),                        # 美团佣金表
 
 
 ]
