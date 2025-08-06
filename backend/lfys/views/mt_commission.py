@@ -32,16 +32,6 @@ class MTCommissionView(APIView):
             if not inflow_file:
                 return DetailResponse({'error': '未找到包含“预付订单”的文件'}, status=status.HTTP_400_BAD_REQUEST)
 
-            name_mapping = {
-                '靓范医生医美连锁（松北万象汇院区）': '哈尔滨 : 靓范医生医美连锁（松北万象汇院区）',
-                '靓范医生医美连锁（万象城院区）': '长春 : 靓范医生医美连锁（万象城院区）',
-                '靓范医生医美连锁（远大购物中心院区）': '长春 : 靓范医生医美连锁（远大购物中心院区）',
-                '靓范医生医美连锁（净月院区）': '长春 : 靓范医生医美连锁（净月院区）',
-                '靓范医生医美连锁（呼市万象城院区）': '呼和浩特 : 靓范医生医美连锁（呼市万象城院区）',
-                '靓范医生医美连锁（欧亚新生活院区）': '长春 : 靓范医生医美连锁（欧亚新生活院区）',
-                '靓范医生医美连锁（郑东万象城院区）': '郑州 : 靓范医生医美连锁（郑东万象城院区）',
-            }
-
             standard_amount_config = {
                 '靓范医生医美连锁（净月院区）': {'daily_amount': 6000, 'days': 31},
                 '靓范医生医美连锁（欧亚新生活院区）': {'daily_amount': 12000, 'days': 31},
@@ -82,6 +72,10 @@ class MTCommissionView(APIView):
                 return name
 
             detail_df['消费门店'] = detail_df['消费门店'].apply(map_to_standard_store)
+
+            # 替换括号 + 映射标准门店名
+            inflow_df['验证门店'] = inflow_df['验证门店'].map(to_full_width_brackets)
+            inflow_df['验证门店'] = inflow_df['验证门店'].apply(map_to_standard_store)
 
             # -------- 预付 + 拼团 合计计算 -------- #
             valid_inflow = inflow_df[(inflow_df['订单状态'] == '已消费') & (inflow_df['订单来源'] != '直播')]
@@ -131,6 +125,8 @@ class MTCommissionView(APIView):
                 '实际佣金（不含直播/刷单）': 0,
                 '广告消耗': 0,
                 '总消耗': 0,
+                '订单量': 0,
+                '订单占比': '',
             }
 
             for store_name in standard_amount_config.keys():
@@ -152,6 +148,7 @@ class MTCommissionView(APIView):
                 summary_all['实际佣金（不含直播/刷单）'] += commission
                 summary_all['广告消耗'] += ad_cost
                 summary_all['总消耗'] += total_cost
+                summary_all['订单量'] += order_num
 
                 results.append({
                     '验证门店': store_name,
