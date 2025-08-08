@@ -54,9 +54,15 @@ class MTInflowOutflowView(APIView):
                     new_columns.append(f"{col[0]}_{col[1]}")
 
             inflow_df_raw.columns = new_columns
-            inflow_df = inflow_df_raw.fillna(method='ffill')
+            inflow_df = inflow_df_raw.copy()
+            # 对指标字段空值直接填0，防止计算时出错
+            metrics_cols = ['初诊人数', '初诊成交', '初复诊成交', '新客业绩', '初诊成交率', '新客成交率', '客单价']
+            for col in metrics_cols:
+                if col in inflow_df.columns:
+                    inflow_df[col] = inflow_df[col].fillna(0)
 
-            # 读取门店明细
+
+        # 读取门店明细
             detail_df = None
             if detail_file:
                 detail_path = default_storage.save(f'temp/{detail_file.name}', ContentFile(detail_file.read()))

@@ -112,7 +112,7 @@ class MTStoreInvertView(APIView):
 
             results = []
             summary_all = {
-                '流出-新客': {'初诊人数': 0, '初诊成交': 0, '初复诊成交': 0, '新客业绩': 0.0},
+                '流出-新客': {'初诊人数': 0, '初诊成交': 0, '初复诊成交': 0, '新客业绩': 0.0, '初诊成交率':0.0, '初复诊成交率':0.0, '客单价': 0.0},
                 '推广数据': {'门店CPC消耗': 0.0, '广告曝光次数': 0, '广告点击量': 0, '广告访问次数': 0, '私信': 0}
             }
 
@@ -124,12 +124,13 @@ class MTStoreInvertView(APIView):
                     (inflow_df['开单人'] == '门店小计')
                     ]
 
-                out_details_sum = {'初诊人数': 0, '初诊成交': 0, '初复诊成交': 0, '新客业绩': 0.0}
+                out_details_sum = {'初诊人数': 0, '初诊成交': 0, '初复诊成交': 0, '新客业绩': 0.0, '客单价': 0.0}
                 for _, row in out_rows.iterrows():
-                    out_details_sum['初诊人数'] += row['初诊人数']
-                    out_details_sum['初诊成交'] += row['初诊成交']
-                    out_details_sum['初复诊成交'] += row['初复诊成交']
-                    out_details_sum['新客业绩'] += row['新客业绩']
+                    out_details_sum['初诊人数'] = row['初诊人数']
+                    out_details_sum['初诊成交'] = row['初诊成交']
+                    out_details_sum['初复诊成交'] = row['初复诊成交']
+                    out_details_sum['新客业绩'] = row['新客业绩']
+                    out_details_sum['客单价'] = row['客单价']
 
                 # 门店明细中的广告数据
                 store_detail = detail_df[detail_df.iloc[:, 0] == name] if detail_df is not None else pd.DataFrame()
@@ -155,14 +156,29 @@ class MTStoreInvertView(APIView):
                     '初诊到诊率': diagnosis_rate,
                     '初诊成交率': to_percent(out_details_sum['初诊成交'] / out_details_sum['初诊人数']) if out_details_sum['初诊人数'] else "0.00%",
                     '初复诊成交率': revisit_rate,
-                    '新客客单价': to_int(out_details_sum['新客业绩'] / out_details_sum['初诊成交']) if out_details_sum['初诊成交'] else 0,
+                    '客单价': out_details_sum['客单价'],
                 }
 
+                # 筛选总计流出-新客数据（来源一级=美团点评，来源二级=一级小计）
+                sum_rows = inflow_df[
+                    (inflow_df['来源一级'] == '美团点评') &
+                    (inflow_df['来源二级'] == '一级小计')
+                    ]
+
+                for _, row in sum_rows.iterrows():
+                    summary_all['流出-新客']['初诊人数'] = row['初诊人数']
+                    summary_all['流出-新客']['初诊成交'] = row['初诊成交']
+                    summary_all['流出-新客']['初复诊成交'] = row['初复诊成交']
+                    summary_all['流出-新客']['新客业绩'] = row['新客业绩']
+                    summary_all['流出-新客']['初诊成交率'] = f"{(row['初诊成交率'] * 100):.2f}%"
+                    summary_all['流出-新客']['初复诊成交率'] = f"{(row['新客成交率'] * 100):.2f}%"
+                    summary_all['流出-新客']['客单价'] = row['客单价']
+
                 # 汇总所有门店数据
-                summary_all['流出-新客']['初诊人数'] += out_details_sum['初诊人数']
-                summary_all['流出-新客']['初诊成交'] += out_details_sum['初诊成交']
-                summary_all['流出-新客']['初复诊成交'] += out_details_sum['初复诊成交']
-                summary_all['流出-新客']['新客业绩'] += out_details_sum['新客业绩']
+                # summary_all['流出-新客']['初诊人数'] += out_details_sum['初诊人数']
+                # summary_all['流出-新客']['初诊成交'] += out_details_sum['初诊成交']
+                # summary_all['流出-新客']['初复诊成交'] += out_details_sum['初复诊成交']
+                # summary_all['流出-新客']['新客业绩'] += out_details_sum['新客业绩']
 
                 summary_all['推广数据']['门店CPC消耗'] += cpc
                 summary_all['推广数据']['广告曝光次数'] += expose

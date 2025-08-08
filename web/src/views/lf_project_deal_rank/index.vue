@@ -35,15 +35,32 @@
           {{ projectName }}
         </h2>
 
-        <!-- 项目标签 -->
-        <div v-if="groupData['项目列表']" class="flex flex-wrap gap-3 mb-6">
-          <span
-            v-for="(item, idx) in groupData['项目列表']"
-            :key="idx"
-            class="bg-gradient-to-l from-yellow-400 to-pink-500 text-white px-4 py-2 rounded-full text-sm shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-          >
-            {{ item }}
-          </span>
+        <!-- 产品（二级分类） -->
+        <div v-if="groupData['产品列表']" class="mb-6">
+          <h3 class="text-lg font-semibold text-white mb-3 border-b border-white pb-1">🧴 产品（二级分类）</h3>
+          <div class="flex flex-wrap gap-3">
+            <span
+              v-for="(item, idx) in groupData['产品列表']"
+              :key="'product-' + idx"
+              class="bg-gradient-to-r from-green-400 to-blue-500 text-white px-4 py-1 rounded-full text-sm shadow-md transition duration-300 transform hover:scale-105"
+            >
+              {{ item }}
+            </span>
+          </div>
+        </div>
+
+        <!-- 项目（三级分类） -->
+        <div v-if="groupData['项目列表']" class="mb-6">
+          <h3 class="text-lg font-semibold text-white mb-3 border-b border-white pb-1">🛠️ 项目（三级分类）</h3>
+          <div class="flex flex-wrap gap-3">
+            <span
+              v-for="(item, idx) in groupData['项目列表']"
+              :key="idx"
+              class="bg-gradient-to-r from-yellow-400 to-pink-500 text-white px-4 py-1 rounded-full text-sm shadow-md transition duration-300 transform hover:scale-105"
+            >
+              {{ item }}
+            </span>
+          </div>
         </div>
 
         <!-- 各类排名展示 -->
@@ -128,6 +145,7 @@ const fetchData = async () => {
       ElMessage.error('数据加载失败，请稍后重试')
     }
   } catch (err) {
+
     ElMessage.error('获取数据失败')
   }
 }
@@ -137,7 +155,7 @@ const sortedEntries = (consultants) => {
 }
 
 const getRankTypes = (groupData) => {
-  return Object.keys(groupData).filter((key) => key !== '项目列表')
+  return Object.keys(groupData).filter((key) => key !== '项目列表' && key !== '产品列表')
 }
 </script>
 
