@@ -38,12 +38,25 @@ class MTStoreInvertView(APIView):
 
             # 读取来源业绩分析表，处理多级表头
             inflow_path = default_storage.save(f'temp/{inflow_file.name}', ContentFile(inflow_file.read()))
-            inflow_df_raw = pd.read_excel(os.path.join('media', inflow_path), sheet_name='来源成交统计', header=[0, 1])
-            inflow_df_raw.columns = [
-                col[1] if col[0] == '新客' else (col[0] if 'Unnamed' in col[1] or pd.isna(col[1]) else f"{col[0]}_{col[1]}")
-                for col in inflow_df_raw.columns
-            ]
-            inflow_df = inflow_df_raw.fillna(method='ffill')
+            inflow_full_path = os.path.join('media', inflow_path)
+            inflow_df_raw = pd.read_excel(inflow_full_path, sheet_name='来源成交统计', header=[0, 1])
+
+            new_columns = []
+            for col in inflow_df_raw.columns:
+                if col[0] == '新客':
+                    new_columns.append(col[1])
+                elif 'Unnamed' in col[1] or pd.isna(col[1]):
+                    new_columns.append(col[0])
+                else:
+                    new_columns.append(f"{col[0]}_{col[1]}")
+
+            inflow_df_raw.columns = new_columns
+            inflow_df = inflow_df_raw.copy()
+            # 对指标字段空值直接填0，防止计算时出错
+            metrics_cols = ['初诊人数', '初诊成交', '初复诊成交', '新客业绩', '初诊成交率', '新客成交率', '客单价']
+            for col in metrics_cols:
+                if col in inflow_df.columns:
+                    inflow_df[col] = inflow_df[col].fillna(0)
 
             # 读取门店明细，补齐字段
             detail_df = None
@@ -117,11 +130,11 @@ class MTStoreInvertView(APIView):
             }
 
             for name, source in name_mapping.items():
-                # 筛选流出-新客数据（来源一级=美团点评，来源二级=source，开单人为门店小计）
+                # 筛选流出-新客数据（来源一级=美团点评，来源二级=source，门店为二级小计）
                 out_rows = inflow_df[
                     (inflow_df['来源一级'] == '美团点评') &
                     (inflow_df['来源二级'] == source) &
-                    (inflow_df['开单人'] == '门店小计')
+                    (inflow_df['门店'] == '二级小计')
                     ]
 
                 out_details_sum = {'初诊人数': 0, '初诊成交': 0, '初复诊成交': 0, '新客业绩': 0.0, '客单价': 0.0}

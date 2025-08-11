@@ -33,11 +33,11 @@ class MTCommissionView(APIView):
                 return DetailResponse({'error': '未找到包含“预付订单”的文件'}, status=status.HTTP_400_BAD_REQUEST)
 
             standard_amount_config = {
-                '靓范医生医美连锁（净月院区）': {'daily_amount': 6000, 'days': 31},
-                '靓范医生医美连锁（欧亚新生活院区）': {'daily_amount': 12000, 'days': 31},
-                '靓范医生医美连锁（松北万象汇院区）': {'daily_amount': 7000, 'days': 31},
-                '靓范医生医美连锁（万象城院区）': {'daily_amount': 8000, 'days': 31},
-                '靓范医生医美连锁（远大购物中心院区）': {'daily_amount': 6000, 'days': 31},
+                '靓范医生医美连锁（净月院区）': {'daily_amount': 6000, 'days': 10},
+                '靓范医生医美连锁（欧亚新生活院区）': {'daily_amount': 12000, 'days': 10},
+                '靓范医生医美连锁（松北万象汇院区）': {'daily_amount': 7000, 'days': 10},
+                '靓范医生医美连锁（万象城院区）': {'daily_amount': 8000, 'days': 10},
+                '靓范医生医美连锁（远大购物中心院区）': {'daily_amount': 6000, 'days': 10},
                 '靓范医生医美连锁（呼市万象城院区）': {'daily_amount': 0, 'days': 0},
                 '靓范医生医美连锁（郑东万象城院区）': {'daily_amount': 0, 'days': 0},
             }

@@ -4,6 +4,7 @@ from .views.lf_customer_activity import LFCustomerActivityView
 from .views.lf_project_deal_rank import LFProjectDealRankView
 from .views.lf_project_package_doctor import LFProjectPackageDoctorView
 from .views.lf_sk import LFSKViewSet
+from .views.lf_stores_report_down import LFStoresReportDown
 from .views.lf_xcx_client_info import LFXcxClientInfoView
 from .views.mt_commission import MTCommissionView
 from .views.mt_inflow_outflow import MTInflowOutflowView
@@ -15,6 +16,7 @@ urlpatterns = [
     path('api/LFProjectDealRankView/', LFProjectDealRankView.as_view(), name='lf_project_deal_rank'),                   # 咨询师项目销售排行
     path('api/LFXcxClientInfoView/', LFXcxClientInfoView.as_view(), name='lf_xcx_client_info'),                         # 小程序客户积分统计
     path('api/LFProjectPackageDoctorView/', LFProjectPackageDoctorView.as_view(), name='lf_project_package_doctor'),    # 项目&套餐排行AND医生划扣排行
+    path('api/LFStoresReportDown/', LFStoresReportDown.as_view(), name='lf_stores_report_down'),                        # 各门店报表汇总下载
 
 
     #美团
