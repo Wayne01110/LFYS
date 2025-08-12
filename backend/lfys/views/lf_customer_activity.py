@@ -1,10 +1,9 @@
 import os
 import pandas as pd
-
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from rest_framework import status
+from django.core.files.base import ContentFile
 from rest_framework.views import APIView
+from rest_framework import status
 
 from dvadmin.utils.json_response import DetailResponse
 
@@ -63,7 +62,7 @@ class LFCustomerActivityView(APIView):
                 # 读取对应的 Excel 表
                 if '咨询维度' in file.name:  # 处理咨询维度.xlsx
                     df_consulting = xls.parse(sheet_name='咨询业绩')
-                    selected_columns = [4, 5, 6, 7, 10, 11, 12, 15, 16, 19, 20, 21, 23, 24, 27, 28, 31, 32]
+                    selected_columns = [4, 5, 6, 7, 10, 11, 14, 15, 16, 19, 20, 21, 23, 24, 27, 28, 31, 32]
                     df_consulting = df_consulting.iloc[:, selected_columns]
                     # 老客成交人数
                     row_45 = df_consulting.iloc[45]

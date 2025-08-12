@@ -125,17 +125,58 @@ const handleUpload = async () => {
 
 // **排名数据**
 const rankings = computed(() => [
-  { title: "顾客活跃度排名", columns: ["老客到院人数", "顾客总数不含E类", "顾客活跃度"], data: [...consultants.value].sort((a, b) => b.顾客活跃度 - a.顾客活跃度) },
-  { title: "老客业绩排名", columns: ["老客业绩"], data: [...consultants.value].sort((a, b) => b.老客业绩 - a.老客业绩) },
-  { title: "老客客单价排名", columns: ["老客客单价"], data: [...consultants.value].sort((a, b) => b.老客客单价 - a.老客客单价) },
-  { title: "老客成交率排名", columns: ["老客成交人数", "老客到院人数", "老客成交率"], data: [...consultants.value].sort((a, b) => b.老客成交率 - a.老客成交率) },
-  { title: "初复诊业绩排名", columns: ["初复诊业绩"], data: [...consultants.value].sort((a, b) => b.初复诊业绩 - a.初复诊业绩) },
-  { title: "初复诊客单价排名", columns: ["初复诊客单价"], data: [...consultants.value].sort((a, b) => b.初复诊客单价 - a.初复诊客单价) },
-  { title: "初复诊成交率排名", columns: ["初复诊成交人数", "初复诊到院人数", "初复诊成交率"], data: [...consultants.value].sort((a, b) => b.初复诊成交率 - a.初复诊成交率) },
-  { title: "老带新业绩排名", columns: ["老带新业绩"], data: [...consultants.value].sort((a, b) => b.老带新业绩 - a.老带新业绩) },
-  { title: "老带新客单价排名", columns: ["老带新客单价"], data: [...consultants.value].sort((a, b) => b.老带新客单价 - a.老带新客单价) },
-  { title: "老带新成交率排名", columns: ["老带新成交人数", "老带新到院人数", "老带新成交率"], data: [...consultants.value].sort((a, b) => b.老带新成交率 - a.老带新成交率) }
+  {
+    title: "顾客活跃度排名",
+    columns: ["老客到院人数", "顾客总数不含E类", "顾客活跃度"],
+    data: [...consultants.value].sort((a, b) => b.顾客活跃度 - a.顾客活跃度),
+  },
+  {
+    title: "老客业绩排名",
+    columns: ["老客业绩"],
+    data: [...consultants.value].sort((a, b) => b.老客业绩 - a.老客业绩),
+  },
+  {
+    title: "老客客单价排名",
+    columns: ["老客客单价"],
+    data: [...consultants.value].sort((a, b) => b.老客客单价 - a.老客客单价),
+  },
+  {
+    title: "老客成交率排名",
+    columns: ["老客成交人数", "老客到院人数", "老客成交率"],
+    data: [...consultants.value].sort((a, b) => parseFloat(b.老客成交率) - parseFloat(a.老客成交率)),
+  },
+  {
+    title: "初复诊业绩排名",
+    columns: ["初复诊业绩"],
+    data: [...consultants.value].sort((a, b) => b.初复诊业绩 - a.初复诊业绩),
+  },
+  {
+    title: "初复诊客单价排名",
+    columns: ["初复诊客单价"],
+    data: [...consultants.value].sort((a, b) => b.初复诊客单价 - a.初复诊客单价),
+  },
+  {
+    title: "初复诊成交率排名",
+    columns: ["初复诊成交人数", "初复诊到院人数", "初复诊成交率"],
+    data: [...consultants.value].sort((a, b) => parseFloat(b.初复诊成交率) - parseFloat(a.初复诊成交率)),
+  },
+  {
+    title: "老带新业绩排名",
+    columns: ["老带新业绩"],
+    data: [...consultants.value].sort((a, b) => b.老带新业绩 - a.老带新业绩),
+  },
+  {
+    title: "老带新客单价排名",
+    columns: ["老带新客单价"],
+    data: [...consultants.value].sort((a, b) => b.老带新客单价 - a.老带新客单价),
+  },
+  {
+    title: "老带新成交率排名",
+    columns: ["老带新成交人数", "老带新到院人数", "老带新成交率"],
+    data: [...consultants.value].sort((a, b) => parseFloat(b.老带新成交率) - parseFloat(a.老带新成交率)),
+  }
 ]);
+
 
 // **前三名颜色标识**
 const getRankClass = (index: number) => {

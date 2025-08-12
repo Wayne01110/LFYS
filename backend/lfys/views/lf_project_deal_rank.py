@@ -1,4 +1,3 @@
-
 import requests
 from rest_framework import status
 from rest_framework.views import APIView
@@ -6,7 +5,7 @@ from collections import defaultdict
 from dvadmin.utils.json_response import DetailResponse
 
 
-class  LFProjectDealRankView(APIView):
+class LFProjectDealRankView(APIView):
     permission_classes = []
     """
         add by Wayne 2025-04-14  咨询师项目业绩排行
@@ -34,7 +33,8 @@ class  LFProjectDealRankView(APIView):
                 headers={"Content-Type": "application/json"}
             )
             if login_response.status_code != 200:
-                return DetailResponse({"error": "登录失败", "details": login_response.json()}, status=status.HTTP_400_BAD_REQUEST)
+                return DetailResponse({"error": "登录失败", "details": login_response.json()},
+                                      status=status.HTTP_400_BAD_REQUEST)
             res_json = login_response.json()
             token = res_json.get("data", {}).get("user", {}).get("token")
             if not token:
@@ -83,13 +83,13 @@ class  LFProjectDealRankView(APIView):
                 # vipNum                会员号
                 for record in records:
                     customer_type = record.get('consumerCustomerType', '').strip()  # 消费时客户类别
-                    project = record.get('projectThreeName')                        # 项目（三级分类）
-                    product = record.get('productTwoName')                          # 产品（二级分类）
-                    depart = record.get('deptOneName')                              # 科室（一级分类）
-                    user = record.get('billingUserName')                            # 原订单开单人
+                    project = record.get('projectThreeName')  # 项目（三级分类）
+                    product = record.get('productTwoName')  # 产品（二级分类）
+                    depart = record.get('deptOneName')  # 科室（一级分类）
+                    user = record.get('billingUserName')  # 原订单开单人
                     # money = float(record.get('projectActualMoney') or 0.0)        # 项目本次实付/实退
-                    vip_num = str(record.get('vipNum'))                             # 会员号
-                    achievement = float(record.get('achievement') or 0.0)           # 本次结算业绩
+                    vip_num = str(record.get('vipNum'))  # 会员号
+                    achievement = float(record.get('achievement') or 0.0)  # 本次结算业绩
                     if depart in ['禁用', '药品-CC', '商品-CC', '耗材-CC']:
                         continue
                     if not depart or not product or not user:
