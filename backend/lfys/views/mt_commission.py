@@ -38,8 +38,8 @@ class MTCommissionView(APIView):
                 '靓范医生医美连锁（松北万象汇院区）': {'daily_amount': 7000, 'days': 10},
                 '靓范医生医美连锁（万象城院区）': {'daily_amount': 8000, 'days': 10},
                 '靓范医生医美连锁（远大购物中心院区）': {'daily_amount': 6000, 'days': 10},
-                '靓范医生医美连锁（呼市万象城院区）': {'daily_amount': 0, 'days': 0},
-                '靓范医生医美连锁（郑东万象城院区）': {'daily_amount': 0, 'days': 0},
+                '靓范医生医美连锁（呼市万象城院区）': {'daily_amount': 6000, 'days': 10},
+                '靓范医生医美连锁（郑东万象城院区）': {'daily_amount': 6000, 'days': 10},
             }
 
             def to_int(value):
