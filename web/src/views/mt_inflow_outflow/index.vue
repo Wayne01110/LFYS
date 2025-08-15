@@ -115,6 +115,7 @@
             :row-key="row => row.流出门店"
             class="flow-el-table el-table-flow-out"
             max-height="320"
+            :cell-style="cellStyle"
           >
             <el-table-column prop="流出门店" label="流出门店" />
             <el-table-column prop="初诊人数" label="初诊人数" />
@@ -137,6 +138,7 @@
             :row-key="row => row.点评来源"
             class="flow-el-table el-table-flow-in"
             max-height="320"
+            :cell-style="cellStyle"
           >
             <el-table-column prop="点评来源" label="点评来源" />
             <el-table-column prop="初诊人数" label="初诊人数" />
@@ -245,6 +247,19 @@ function storeBlockGradient(index) {
   ]
   return colors[index % colors.length]
 }
+
+// 在 <script setup> 内定义即可
+const cellStyle = ({ row, column }) => {
+  if (column.property === '客单价') {
+    if (Number(row['客单价']) < 3500) {
+      return { color: 'red', fontWeight: 'bold' }
+    } else if (Number(row['客单价']) >= 3500) {
+      return { color: 'green', fontWeight: 'bold' }
+    }
+  }
+  return {}
+}
+
 </script>
 
 <style scoped>

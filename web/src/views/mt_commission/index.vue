@@ -1,17 +1,21 @@
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-6 font-sans relative flex flex-col items-center"
+    class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-800 to-pink-900 text-white p-6 font-sans relative flex flex-col items-center"
   >
     <!-- 背景光圈 -->
     <div
-      class="absolute -top-40 -left-40 w-[400px] h-[400px] bg-pink-400 blur-3xl opacity-20 rounded-full animate-pulse"
+      class="absolute -top-40 -left-40 w-[450px] h-[450px] bg-pink-500 blur-3xl opacity-25 rounded-full animate-pulse"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-blue-500 blur-3xl opacity-20 rounded-full animate-pulse"
       aria-hidden="true"
     ></div>
 
     <!-- 标题 -->
     <h1
-      class="text-5xl font-extrabold mb-8 text-center drop-shadow-lg select-none"
-      style="font-size: 2.8rem;"
+      class="text-5xl font-extrabold mb-8 text-center drop-shadow-2xl select-none text-gradient"
+      style="background: linear-gradient(90deg,#ffed4a,#f43f5e,#8b5cf6); -webkit-background-clip: text; color: transparent;"
     >
       ✨ 美团佣金 ✨
     </h1>
@@ -31,7 +35,7 @@
         将 Excel 文件拖到此处，或
         <em class="text-yellow-400 underline cursor-pointer">点击上传</em>
       </p>
-      <p class="el-upload__tip mt-1 text-sm text-gray-400">
+      <p class="el-upload__tip mt-1 text-sm text-gray-300">
         支持最多5个文件，格式 .xls 或 .xlsx
       </p>
     </el-upload>
@@ -44,19 +48,19 @@
         :loading="loading"
         :disabled="fileList.length === 0"
         @click="handleSubmit"
-        class="shadow-xl"
+        class="shadow-2xl"
       >
         查询分析
       </el-button>
     </div>
 
     <!-- 表格容器 -->
-    <div class="w-full max-w-[100vw] overflow-x-hidden">
+    <div class="w-full max-w-[100vw] overflow-x-auto">
       <div
         ref="tableWrapperRef"
         class="transform origin-top-left"
         :style="{
-          transform: `scale(${scale})`,
+          transform: `scale(${scale.value})`,
           width: rawTableWidth + 'px',
           margin: '0 auto',
         }"
@@ -67,7 +71,7 @@
           stripe
           size="medium"
           :row-class-name="rowClassName"
-          style="width: 1340px; background-color: #1f1f32;"
+          style="width: 1340px; background-color: #1c1c2e; border-radius: 12px;"
           :header-cell-style="headerCellStyle"
           :cell-style="cellStyle"
         >
@@ -162,7 +166,6 @@ const handleSubmit = async () => {
   }
 }
 
-// 格式化函数
 function formatMoney(_, __, val) {
   const v = Number(val)
   return isNaN(v) ? '/' : v.toLocaleString()
@@ -178,7 +181,6 @@ function formatPercent(_, __, val) {
   return val || '/'
 }
 
-// 行样式
 function rowClassName({ row }) {
   if (row.验证门店 === '合计') return 'total-row'
   const delta = row.佣金数据?.差额
@@ -188,56 +190,59 @@ function rowClassName({ row }) {
 }
 function headerCellStyle() {
   return {
-    background: '#3b2e5a',
-    color: '#f0e9ff',
+    background: 'linear-gradient(90deg,#6d28d9,#9333ea)',
+    color: '#fdf2ff',
     fontWeight: '700',
-    fontSize: '12px',
+    fontSize: '13px',
     userSelect: 'none',
   }
 }
 function cellStyle() {
   return {
-    background: '#23243b',
-    color: '#d4d4ff',
+    background: '#1a1a2e',
+    color: '#e0d7ff',
     fontWeight: '500',
-    fontSize: '11px',
+    fontSize: '12px',
   }
 }
 </script>
 
 <style scoped>
 .upload-box {
-  background-color: rgba(255, 255, 255, 0.07);
-  border: 3px dashed #a855f7;
-  border-radius: 20px;
-  padding: 38px 22px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 3px dashed #8b5cf6;
+  border-radius: 24px;
+  padding: 40px 24px;
   text-align: center;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 30px rgba(139,92,246,0.3);
 }
 .upload-box:hover {
-  border-color: #f43f5e;
+  border-color: #f472b6;
+  box-shadow: 0 0 40px rgba(244,114,182,0.5);
 }
 .upload-icon {
-  font-size: 56px;
-  color: #d946ef;
-  opacity: 0.85;
+  font-size: 60px;
+  color: #c084fc;
+  opacity: 0.9;
 }
 .upload-box:hover .upload-icon {
-  color: #f43f5e;
+  color: #f472b6;
 }
 .el-button[type='gradient'] {
-  background: linear-gradient(90deg, #a855f7 0%, #ec4899 100%);
+  background: linear-gradient(90deg,#8b5cf6,#f472b6);
   border: none;
-  box-shadow: 0 0 25px #ec4899cc;
+  box-shadow: 0 0 30px #f472b6cc;
   font-weight: 600;
+  transition: all 0.3s ease;
 }
 .el-button[type='gradient']:hover:not(:disabled) {
-  box-shadow: 0 0 40px #f43f5e;
+  box-shadow: 0 0 50px #f472b6;
 }
 
 /* 行样式 */
 .total-row > td {
-  background: linear-gradient(90deg, #7e22ce, #ec4899) !important;
+  background: linear-gradient(90deg, #9333ea, #f472b6) !important;
   color: #fff !important;
   font-weight: 700 !important;
   font-size: 14px !important;
@@ -250,5 +255,17 @@ function cellStyle() {
 .row-positive > td:nth-child(4) {
   color: #34d399 !important;
   font-weight: 700;
+}
+
+/* 滚动条隐藏美化 */
+::-webkit-scrollbar {
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139,92,246,0.5);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 </style>
